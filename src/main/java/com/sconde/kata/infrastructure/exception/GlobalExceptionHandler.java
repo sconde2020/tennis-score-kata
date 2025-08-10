@@ -1,6 +1,6 @@
-package com.sconde.kata.exception;
+package com.sconde.kata.infrastructure.exception;
 
-import com.sconde.kata.model.Player;
+import com.sconde.kata.domain.model.Player;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingServletRequestParameterException;

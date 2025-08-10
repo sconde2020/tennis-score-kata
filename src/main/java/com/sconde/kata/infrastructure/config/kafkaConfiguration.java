@@ -1,4 +1,4 @@
-package com.sconde.kata.config;
+package com.sconde.kata.infrastructure.config;
 
 import lombok.NonNull;
 import org.apache.kafka.clients.consumer.Consumer;

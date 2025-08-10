@@ -1,4 +1,4 @@
-package com.sconde.kata.model;
+package com.sconde.kata.domain.model;
 
 import lombok.AccessLevel;
 import lombok.Getter;

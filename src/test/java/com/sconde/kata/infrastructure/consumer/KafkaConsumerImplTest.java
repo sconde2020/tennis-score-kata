@@ -1,20 +1,22 @@
-package com.sconde.kata.service;
+package com.sconde.kata.infrastructure.consumer;
 
-import com.sconde.kata.model.Player;
+import com.sconde.kata.domain.model.Player;
+import com.sconde.kata.domain.service.GameServiceImpl;
+import com.sconde.kata.infrastructure.producer.KafkaConsumerImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.*;
 
-class KafkaConsumerServiceTest {
+class KafkaConsumerImplTest {
 
-    private GameService gameService;
-    private KafkaConsumerService kafkaConsumerService;
+    private GameServiceImpl gameServiceImpl;
+    private KafkaConsumerImpl kafkaConsumerImpl;
 
     @BeforeEach
     void setUp() {
-        gameService = mock(GameService.class);
-        kafkaConsumerService = new KafkaConsumerService(gameService);
+        gameServiceImpl = mock(GameServiceImpl.class);
+        kafkaConsumerImpl = new KafkaConsumerImpl(gameServiceImpl);
     }
 
     @Test
@@ -23,10 +25,10 @@ class KafkaConsumerServiceTest {
         String point = "A";
 
         // When
-        kafkaConsumerService.consume(point);
+        kafkaConsumerImpl.consume(point);
 
         // Then
-        verify(gameService, times(1)).processPoint(Player.A);
+        verify(gameServiceImpl, times(1)).processPoint(Player.A);
     }
 
     @Test
@@ -35,10 +37,10 @@ class KafkaConsumerServiceTest {
         String point = "B";
 
         // When
-        kafkaConsumerService.consume(point);
+        kafkaConsumerImpl.consume(point);
 
         // Then
-        verify(gameService, times(1)).processPoint(Player.B);
+        verify(gameServiceImpl, times(1)).processPoint(Player.B);
     }
 
     @Test
@@ -48,12 +50,12 @@ class KafkaConsumerServiceTest {
 
         // Then
         try {
-            kafkaConsumerService.consume(invalidPoint);
+            kafkaConsumerImpl.consume(invalidPoint);
             assert false : "Expected IllegalArgumentException";
         } catch (IllegalArgumentException e) {
             // Expected, Player.valueOf throws this if enum is invalid
         }
 
-        verify(gameService, never()).processPoint(any());
+        verify(gameServiceImpl, never()).processPoint(any());
     }
 }

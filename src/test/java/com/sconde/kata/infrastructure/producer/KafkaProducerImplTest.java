@@ -1,21 +1,22 @@
-package com.sconde.kata.service;
+package com.sconde.kata.infrastructure.producer;
 
 import static org.mockito.Mockito.*;
 
-import com.sconde.kata.model.Player;
+import com.sconde.kata.domain.model.Player;
+import com.sconde.kata.infrastructure.consumer.KafkaProducerImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.kafka.core.KafkaTemplate;
 
-public class KafkaProducerServiceTest {
+public class KafkaProducerImplTest {
 
     private KafkaTemplate<String, String> kafkaTemplate;
-    private  KafkaProducerService producerService;
+    private KafkaProducerImpl producerService;
 
     @BeforeEach
     void setUp() {
         kafkaTemplate = mock(KafkaTemplate.class);
-        producerService = new KafkaProducerService(kafkaTemplate);
+        producerService = new KafkaProducerImpl(kafkaTemplate);
     }
 
     @Test
@@ -27,7 +28,7 @@ public class KafkaProducerServiceTest {
         producerService.sendPoint(player);
 
         // Then
-        verify(kafkaTemplate, times(1)).send(KafkaProducerService.TOPIC, player.name());
+        verify(kafkaTemplate, times(1)).send(KafkaProducerImpl.TOPIC, player.name());
     }
 
     @Test
@@ -39,6 +40,6 @@ public class KafkaProducerServiceTest {
         producerService.sendPoint(player);
 
         // Then
-        verify(kafkaTemplate, times(1)).send(KafkaProducerService.TOPIC, player.name());
+        verify(kafkaTemplate, times(1)).send(KafkaProducerImpl.TOPIC, player.name());
     }
 }

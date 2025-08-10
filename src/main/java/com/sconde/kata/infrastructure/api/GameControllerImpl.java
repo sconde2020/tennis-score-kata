@@ -1,8 +1,8 @@
-package com.sconde.kata.controller;
+package com.sconde.kata.infrastructure.api;
 
-import com.sconde.kata.model.Player;
-import com.sconde.kata.service.GameService;
-import com.sconde.kata.service.KafkaProducerService;
+import com.sconde.kata.domain.model.Player;
+import com.sconde.kata.domain.service.GameService;
+import com.sconde.kata.infrastructure.producer.KafkaProducer;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,14 +18,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/game")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class GameController {
+public class GameControllerImpl implements GameController{
 
     GameService gameService;
-    KafkaProducerService kafkaProducerService;
+
+    KafkaProducer kafkaProducer;
+
 
     @PostMapping("/point")
     public ResponseEntity<String> recordPoint(@RequestParam Player player) {
-        kafkaProducerService.sendPoint(player);
+        kafkaProducer.sendPoint(player);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body("Point submitted for processing.");
@@ -50,7 +52,7 @@ public class GameController {
 
         for (char c : sequence.toCharArray()) {
             Player player = Player.valueOf(String.valueOf(c).toUpperCase());
-            kafkaProducerService.sendPoint(player);
+            kafkaProducer.sendPoint(player);
         }
         return ResponseEntity
                 .status(HttpStatus.CREATED)

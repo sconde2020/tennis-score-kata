@@ -1,8 +1,8 @@
-package com.sconde.kata.controller;
+package com.sconde.kata.infrastructure.api;
 
-import com.sconde.kata.model.Player;
-import com.sconde.kata.service.GameService;
-import com.sconde.kata.service.KafkaProducerService;
+import com.sconde.kata.domain.model.Player;
+import com.sconde.kata.domain.service.GameServiceImpl;
+import com.sconde.kata.infrastructure.consumer.KafkaProducerImpl;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +14,17 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(GameController.class)
-class GameControllerTest {
+@WebMvcTest(GameControllerImpl.class)
+class GameControllerImplTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private GameService gameService;
+    private GameServiceImpl gameServiceImpl;
 
     @MockBean
-    private KafkaProducerService kafkaProducerService;
+    private KafkaProducerImpl kafkaProducerImpl;
 
     @Test
     void shouldReturnCreated_givenValidPlayer_whenRecordPoint() throws Exception {
@@ -33,12 +33,12 @@ class GameControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().string("Point submitted for processing."));
 
-        verify(kafkaProducerService).sendPoint(Player.A);
+        verify(kafkaProducerImpl).sendPoint(Player.A);
     }
 
     @Test
     void shouldReturnOk_givenGameInProgress_whenGetScore() throws Exception {
-        when(gameService.getCurrentScore()).thenReturn("Score: 15");
+        when(gameServiceImpl.getCurrentScore()).thenReturn("Score: 15");
 
         mockMvc.perform(get("/api/game/score"))
                 .andExpect(status().isOk())
@@ -51,7 +51,7 @@ class GameControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("Game is reset."));
 
-        verify(gameService).resetGame();
+        verify(gameServiceImpl).resetGame();
     }
 
     @Test
@@ -61,21 +61,21 @@ class GameControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().string("Sequence submitted for processing."));
 
-        verify(kafkaProducerService).sendPoint(Player.A);
-        verify(kafkaProducerService).sendPoint(Player.B);
+        verify(kafkaProducerImpl).sendPoint(Player.A);
+        verify(kafkaProducerImpl).sendPoint(Player.B);
     }
 
     @Test
     void shouldReturnOk_givenValidSequence_whenProcessSequenceSync() throws Exception {
-        when(gameService.getCurrentScore()).thenReturn("Score: 40");
+        when(gameServiceImpl.getCurrentScore()).thenReturn("Score: 40");
 
         mockMvc.perform(post("/api/game/process-sequence-sync")
                         .param("sequence", "AB"))
                 .andExpect(status().isCreated())
                 .andExpect(content().string("Score: 40"));
 
-        verify(gameService).processPoint(Player.A);
-        verify(gameService).processPoint(Player.B);
+        verify(gameServiceImpl).processPoint(Player.A);
+        verify(gameServiceImpl).processPoint(Player.B);
     }
 
     @Test

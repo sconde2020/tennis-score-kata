@@ -1,19 +1,20 @@
-package com.sconde.kata.service;
+package com.sconde.kata.domain.service;
 
-import com.sconde.kata.model.Game;
-import com.sconde.kata.model.Player;
-import com.sconde.kata.model.Score;
+import com.sconde.kata.domain.model.Game;
+import com.sconde.kata.domain.model.Player;
+import com.sconde.kata.domain.model.Score;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class GameService {
+public class GameServiceImpl implements GameService {
     private Game game = new Game();
     private final List<String> scoreMessages = new ArrayList<>();
     private final Object lock = new Object();
 
+    @Override
     public void processPoint(Player winner) {
         synchronized (lock) {
             if (game.isGameFinished()) {
@@ -33,12 +34,14 @@ public class GameService {
         }
     }
 
+    @Override
     public String getCurrentScore() {
         synchronized (lock) {
             return String.join("\n", scoreMessages);
         }
     }
 
+    @Override
     public void resetGame() {
         synchronized (lock) {
             this.game = new Game();
