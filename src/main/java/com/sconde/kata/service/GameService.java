@@ -10,11 +10,11 @@ import java.util.List;
 
 @Service
 public class GameService {
-    private final Object lock = new Object();
     private Game game = new Game();
     private final List<String> scoreMessages = new ArrayList<>();
+    private final Object lock = new Object();
 
-    public void consumePoint(Player winner) {
+    public void processPoint(Player winner) {
         synchronized (lock) {
             if (game.isGameFinished()) {
                 // Start new game automatically
@@ -22,7 +22,7 @@ public class GameService {
                 scoreMessages.clear();
             }
 
-            Game newGame = deepCopy(game);
+            Game newGame = new Game(game); // copy the original for concurrency
             updateScore(newGame, winner);
 
             // Commit updated state
@@ -116,21 +116,12 @@ public class GameService {
     }
 
     private void incrementNormalScore(Game game, Player player, Score playerScore) {
-        Score newScore = incrementScore(playerScore);
+        Score newScore = playerScore.incrementScore();
         if (player == Player.A) {
             game.setPlayerAScore(newScore);
         } else {
             game.setPlayerBScore(newScore);
         }
-    }
-
-    private Score incrementScore(Score currentScore) {
-        return switch (currentScore) {
-            case LOVE -> Score.FIFTEEN;
-            case FIFTEEN -> Score.THIRTY;
-            case THIRTY -> Score.FORTY;
-            default -> currentScore;
-        };
     }
 
     private String formatScoreMessage(Game game) {
@@ -146,26 +137,8 @@ public class GameService {
         if (game.getPlayerBScore() == Score.ADVANTAGE) {
             return "Advantage Player B";
         }
-        return "Player A : " + scoreToString(game.getPlayerAScore()) +
-                " / Player B : " + scoreToString(game.getPlayerBScore());
+        return "Player A : " + game.getPlayerAScore().getValue() +
+                " / Player B : " + game.getPlayerBScore().getValue();
     }
 
-    private String scoreToString(Score score) {
-        return switch (score) {
-            case LOVE -> "0";
-            case FIFTEEN -> "15";
-            case THIRTY -> "30";
-            case FORTY -> "40";
-            default -> "";
-        };
-    }
-
-    private Game deepCopy(Game original) {
-        Game copy = new Game();
-        copy.setPlayerAScore(original.getPlayerAScore());
-        copy.setPlayerBScore(original.getPlayerBScore());
-        copy.setGameFinished(original.isGameFinished());
-        copy.setWinner(original.getWinner());
-        return copy;
-    }
 }

@@ -16,6 +16,6 @@ public class KafkaConsumerService {
     @KafkaListener(topics = "tennis-points", groupId = "tennis-group")
     public void consume(String point) {
         Player player = Player.valueOf(point);
-        gameService.consumePoint(player);
+        gameService.processPoint(player);
     }
 }

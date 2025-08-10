@@ -26,7 +26,7 @@ class KafkaConsumerServiceTest {
         kafkaConsumerService.consume(point);
 
         // Then
-        verify(gameService, times(1)).consumePoint(Player.A);
+        verify(gameService, times(1)).processPoint(Player.A);
     }
 
     @Test
@@ -38,7 +38,7 @@ class KafkaConsumerServiceTest {
         kafkaConsumerService.consume(point);
 
         // Then
-        verify(gameService, times(1)).consumePoint(Player.B);
+        verify(gameService, times(1)).processPoint(Player.B);
     }
 
     @Test
@@ -54,6 +54,6 @@ class KafkaConsumerServiceTest {
             // Expected, Player.valueOf throws this if enum is invalid
         }
 
-        verify(gameService, never()).consumePoint(any());
+        verify(gameService, never()).processPoint(any());
     }
 }
