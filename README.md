@@ -19,15 +19,19 @@ A RESTful Spring Boot service to manage a game’s scoring system. It supports r
 
 1. Ensure Kafka is running and configured.
 
-2. Build the app:
+2. Verify code coverage
+
+   ```mvn clean verify```
+
+3. Build the app:
 
    ```mvn clean install```
 
-3. Run the app:
+4. Run the app:
 
     ```mvn spring-boot:run```
 
-4. Interact with the API:
+5. Interact with the API:
 
     Use any HTTP client (swagger, curl, Postman, etc.) to interact with the API.
 

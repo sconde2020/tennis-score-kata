@@ -1,11 +1,15 @@
 package com.sconde.kata.infrastructure.exception;
 
 import com.sconde.kata.domain.model.Player;
+import com.sconde.kata.infrastructure.aspect.ControllerLoggingAspect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
 
 import java.util.Arrays;
 import java.util.regex.Matcher;
@@ -14,12 +18,17 @@ import java.util.regex.Pattern;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     private static final Pattern ENUM_MSG_PATTERN =
             Pattern.compile("No enum constant .*\\.([A-Za-z0-9_]+)");
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request) {
         String originalMsg = ex.getMessage();
+
+        LOGGER.error("❌ Exception at [{}]: {}", request.getDescription(false), originalMsg, ex);
+
         if (originalMsg != null) {
             Matcher matcher = ENUM_MSG_PATTERN.matcher(originalMsg);
             if (matcher.find()) {
@@ -36,7 +45,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<String> handleMissingParams(MissingServletRequestParameterException ex) {
+    public ResponseEntity<String> handleMissingParams(MissingServletRequestParameterException ex, WebRequest request) {
+        LOGGER.error("❌ Exception at [{}]: {}", request.getDescription(false), ex.getMessage(), ex);
         String paramName = ex.getParameterName();
         String message = "Missing required request parameter: '" + paramName + "'";
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);

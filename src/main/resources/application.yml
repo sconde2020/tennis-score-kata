@@ -32,4 +32,4 @@ management:
 logging:
   level:
     org.springframework.kafka: INFO
-    com.sconde.kata: DEBUG
+    com.sconde.kata: INFO
