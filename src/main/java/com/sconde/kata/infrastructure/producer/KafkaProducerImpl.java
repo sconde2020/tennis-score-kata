@@ -1,7 +1,6 @@
-package com.sconde.kata.infrastructure.consumer;
+package com.sconde.kata.infrastructure.producer;
 
 import com.sconde.kata.domain.model.Player;
-import com.sconde.kata.infrastructure.producer.KafkaProducer;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

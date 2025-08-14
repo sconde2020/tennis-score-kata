@@ -2,7 +2,6 @@ package com.sconde.kata.infrastructure.consumer;
 
 import com.sconde.kata.domain.model.Player;
 import com.sconde.kata.domain.service.GameServiceImpl;
-import com.sconde.kata.infrastructure.producer.KafkaConsumerImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

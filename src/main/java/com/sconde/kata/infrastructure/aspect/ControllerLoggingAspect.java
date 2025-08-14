@@ -18,7 +18,7 @@ public class ControllerLoggingAspect {
 
     @Before("controllerMethods()")
     public void logBefore(JoinPoint joinPoint) {
-        LOGGER.info("➡️  Entering: {}.{}() with args = {}",
+        LOGGER.info("Entering: {}.{}() with args = {}",
                 joinPoint.getSignature().getDeclaringTypeName(),
                 joinPoint.getSignature().getName(),
                 joinPoint.getArgs());
@@ -26,7 +26,7 @@ public class ControllerLoggingAspect {
 
     @AfterReturning(pointcut = "controllerMethods()", returning = "result")
     public void logAfter(JoinPoint joinPoint, Object result) {
-        LOGGER.info("✅  Exiting: {}.{}() with result = {}",
+        LOGGER.info("Exiting: {}.{}() with result = {}",
                 joinPoint.getSignature().getDeclaringTypeName(),
                 joinPoint.getSignature().getName(),
                 result);

@@ -2,7 +2,7 @@ package com.sconde.kata.infrastructure.api;
 
 import com.sconde.kata.domain.model.Player;
 import com.sconde.kata.domain.service.GameServiceImpl;
-import com.sconde.kata.infrastructure.consumer.KafkaProducerImpl;
+import com.sconde.kata.infrastructure.producer.KafkaProducerImpl;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

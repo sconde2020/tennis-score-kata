@@ -3,7 +3,6 @@ package com.sconde.kata.infrastructure.producer;
 import static org.mockito.Mockito.*;
 
 import com.sconde.kata.domain.model.Player;
-import com.sconde.kata.infrastructure.consumer.KafkaProducerImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.kafka.core.KafkaTemplate;

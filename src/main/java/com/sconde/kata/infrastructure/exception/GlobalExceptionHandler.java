@@ -1,7 +1,6 @@
 package com.sconde.kata.infrastructure.exception;
 
 import com.sconde.kata.domain.model.Player;
-import com.sconde.kata.infrastructure.aspect.ControllerLoggingAspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -27,7 +26,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request) {
         String originalMsg = ex.getMessage();
 
-        LOGGER.error("❌ Exception at [{}]: {}", request.getDescription(false), originalMsg, ex);
+        LOGGER.error("Exception at [{}]: {}", request.getDescription(false), originalMsg, ex);
 
         if (originalMsg != null) {
             Matcher matcher = ENUM_MSG_PATTERN.matcher(originalMsg);
@@ -46,7 +45,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<String> handleMissingParams(MissingServletRequestParameterException ex, WebRequest request) {
-        LOGGER.error("❌ Exception at [{}]: {}", request.getDescription(false), ex.getMessage(), ex);
+        LOGGER.error("Exception at [{}]: {}", request.getDescription(false), ex.getMessage(), ex);
         String paramName = ex.getParameterName();
         String message = "Missing required request parameter: '" + paramName + "'";
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
