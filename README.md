@@ -15,7 +15,12 @@ A RESTful Spring Boot service to manage a game’s scoring system. It supports r
 - POST /api/game/process-sequence-sync?sequence={sequence} — Process a sequence synchronously.
 - Swagger : http://localhost:8090/api/game/swagger-ui/index.html#/
 
-## Running the Application
+## Prerequisites
+- Docker 20.10+
+- Docker Compose 2.0+
+- Java 21 (only needed for local development)
+
+## Running the Application Locally
 
 1. Ensure Kafka is running and configured.
 
@@ -31,9 +36,47 @@ A RESTful Spring Boot service to manage a game’s scoring system. It supports r
 
     ```mvn spring-boot:run```
 
-5. Interact with the API:
+## Running the Application using Docker
 
-    Use any HTTP client (swagger, curl, Postman, etc.) to interact with the API.
+1. Start the services
+   
+   ```bash
+      docker-compose up -d --build
+   ```
+
+2. Verify services
+
+   ```bash
+     docker-compose ps
+   ```
+
+### Using the Application
+
+1. Recording the points individually
+
+   ```bash
+   curl -X POST "http://localhost:8090/api/game/point?player=A"
+   ```
+   ```bash
+   curl -X POST "http://localhost:8090/api/game/point?player=B"
+
+2. Getting current score
+
+   ```bash
+   curl "http://localhost:8090/api/game/score"
+
+3. Processing a sequence of points
+
+  ```bash
+   curl -X POST "http://localhost:8090/api/game/process-sequence?sequence=ABABAA"
+   ```
+  ```bash
+   curl -X POST "http://localhost:8090/api/game/process-sequence-sync?sequence=ABABAA"
+   ```
+4. Resetting the Game
+   ```bash
+   curl -X POST "http://localhost:8090/api/game/reset"
+   ```
 
 ## Notes
 - Player values must correspond to the defined enum.

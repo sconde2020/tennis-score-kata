@@ -5,7 +5,7 @@ spring:
   application:
     name: tennis-score-service
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     consumer:
       group-id: tennis-group
       auto-offset-reset: latest
