@@ -41,7 +41,11 @@ A RESTful Spring Boot service to manage a game’s scoring system. It supports r
 1. Start the services
    
    ```bash
-      docker-compose up -d --build
+      chmod +x ./start-kraft.sh
+   ```
+
+   ```bash
+      ./start-kraft.sh
    ```
 
 2. Verify services
